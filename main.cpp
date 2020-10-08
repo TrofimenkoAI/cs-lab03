@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <curl/curl.h>
 #include "histogram.h"
 #include "svg.h"
 
@@ -49,6 +50,7 @@ read_input(istream& in, bool prompt) {
 
 int main() {
 
+    curl_global_init(CURL_GLOBAL_ALL);
 
     const auto input = read_input (cin, true);
 
