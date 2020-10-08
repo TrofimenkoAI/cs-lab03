@@ -34,9 +34,15 @@ vector<size_t> make_histogram(const Input& data) {
     return result;
 }
 
-void show_histogram_text(const vector<size_t>& bins) {
+void show_histogram_text(const vector<size_t>& bins, Input& data) {
     const size_t SCREEN_WIDTH = 80;
     const size_t MAX_ASTERISK = SCREEN_WIDTH - 4 - 1;
+
+    while (data.width < 7 || data.width > 80 || data.width  < data.number_count/3)
+    {
+        cerr << custome_width(SCREEN_WIDTH, 1, data.number_count, 7, 8);
+        cin >> data.width;
+    }
 
     size_t max_count = 0;
     for (size_t count : bins) {
@@ -67,4 +73,16 @@ void show_histogram_text(const vector<size_t>& bins) {
         cout << '\n';
     }
 
+}
+
+string custome_width(double width, double BLOCK_WIDTH, size_t number_count, size_t min, size_t max) {
+    stringstream str;
+    if (width < min)
+        str << "Width < " << min << ". Enter the width again:";
+    else if (width > max)
+        str << "Width > " << max << ". Enter the width again:";
+    else if (width < BLOCK_WIDTH*number_count/3)
+        str << "Width < number_count/3. Enter the width again:";
+
+    return str.str();
 }

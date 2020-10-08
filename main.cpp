@@ -3,7 +3,7 @@
 #include <string>
 #include <curl/curl.h>
 #include <sstream>
-#include "histogram.h"
+//#include "histogram.h"
 #include "svg.h"
 
 using namespace std;
@@ -32,12 +32,16 @@ read_input(istream& in, bool prompt) {
 
         cerr << "Enter column count: ";
         in >> data.bin_count;
+
+        cerr << "Enter width: ";
+        in >> data.width;
     }
     else
     {
         in >> data.number_count;
         data.numbers = input_numbers(in, data.number_count);
         in >> data.bin_count;
+        in >> data.width;
     }
 
 
@@ -72,6 +76,15 @@ download(const string& address) {
             cout << curl_easy_strerror(res) << endl;
             exit(1);
         }
+        else
+        {
+            double total_time;
+            res = curl_easy_getinfo(curl, CURLINFO_TOTAL_TIME, &total_time);
+            if (res == CURLE_OK)
+            {
+                cerr << "Total time: " << total_time << endl;
+            }
+        }
         curl_easy_cleanup(curl);
     }
    return read_input(buffer, false);
@@ -95,7 +108,7 @@ int main(int argc, char* argv[]) {
 
     const auto bins = make_histogram(input);
 
-    show_histogram_svg(bins, input.number_count);
+    show_histogram_svg(bins, input);
 
     return 0;
 }
